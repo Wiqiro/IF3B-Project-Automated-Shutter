@@ -1,3 +1,4 @@
+#include "controle_moteurs.h"
 #include <WiFi.h>
 #include <PubSubClient.h>
 const char* ssid = "nicolas";
@@ -23,8 +24,8 @@ PubSubClient client(wifiClient);
 
 int active_mode = 0; // 0 auto et 1 manu
 int capteur_1 = 1; // 1 - 4 pales, 5 pales 1-2, 6 pales 2-3, 7 pales 3-4 
-int max_temp = 30;
-int max_lum = 100; // A changer pour mettre à l'echelle
+int max_temp = 27;
+int max_lum = 5000; // A changer pour mettre à l'echelle
 int min_lum = 100; // A changer pour mettre à l'echelle
 
 void setup_wifi() {
@@ -86,14 +87,14 @@ void callback(char* topic, byte *payload, unsigned int length) {
     }
     if(topic == MQTT_SERIAL_RECEIVER_TEMP){
       if(*payload > max_temp){
-        //int etat_final[4] = {1050, 1050, 1050, 1050};
-        //orienter_volet(etat_final);
+        int etat_final[4] = {1050, 1050, 1050, 1050};
+        orienter_volet(etat_final);
       }
     }
     if(topic == MQTT_SERIAL_RECEIVER_LUM){
       if(*payload < min_lum){
-        //int etat_final[4] = {1050, 1050, 1050, 1050};
-        //orienter_volet(etat_final);
+        int etat_final[4] = {1050, 1050, 1050, 1050};
+        orienter_volet(etat_final);
       }
       if(*payload < max_lum){
         //Fermer la pale assigner (ici la pale est def par la variable : capteur_1
