@@ -1,6 +1,5 @@
 #include "controle_moteurs.h"
 
-
 void bouger_pale(int pale, int pas) {
   if (pale == 1) {
     stepper[pale].step(-pas);

@@ -1,44 +1,31 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
-
-
-// Update these with values suitable for your network.
 const char* ssid = "nicolas";
-const char* password = "123456789";
+const char* password = "00000000";
 const char* mqtt_server = "mqtt.ci-ciad.utbm.fr";
 #define mqtt_port 1883
 #define MQTT_USER "" 
 #define MQTT_PASSWORD ""
-//#define MQTT_SERIAL_PUBLISH_LUM "IF3B/ProjetVoletGroupe2"
-//#define MQTT_SERIAL_RECEIVER_CH "IF3B/ProjetVoletGroupe2"
-#define MQTT_SERIAL_PUBLISH_LUM "IF3B/ProjetVoletGroupe2/luminosite"
-#define MQTT_SERIAL_PUBLISH_TEMP "IF3B/ProjetVoletGroupe2/temperature"
-#define MQTT_SERIAL_RECEIVER_TEMPS_OUVERTURE "IF3B/ProjetVoletGroupe2/temps/ouverture"
-#define MQTT_SERIAL_RECEIVER_TEMPS_FERMETURE "IF3B/ProjetVoletGroupe2/temps/fermeture"
-#define MQTT_SERIAL_RECEIVER_CAPTEUR_1 "IF3B/ProjetVoletGroupe2/capteur/1" // de 1 à 4 pour l'assignation des pales
-#define MQTT_SERIAL_RECEIVER_MODE "IF3B/ProjetVoletGroupe2/mode" // 0 = automatique et 1 = manuel
+#define MQTT_SERIAL_RECEIVER_LUM "IF3B/ProjetVoletGroupe2/luminosite"
+#define MQTT_SERIAL_RECEIVER_TEMP "IF3B/ProjetVoletGroupe2/temperature"
+#define MQTT_SERIAL_RECEIVER_MAX_LUM "IF3B/ProjetVoletGroupe2/max/luminosite"
+#define MQTT_SERIAL_RECEIVER_MAX_TEMP "IF3B/ProjetVoletGroupe2/max/temperature"
 #define MQTT_SERIAL_RECEIVER_ACTION "IF3B/ProjetVoletGroupe2/action" // 0 ferme et 1 ouvre
+#define MQTT_SERIAL_RECEIVER_MODE "IF3B/ProjetVoletGroupe2/mode" // 0 = automatique et 1 = manuel
+#define MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN "IF3B/ProjetVoletGroupe2/capteur" // de 1-4 pales, 5 = 1-2, 6 = 2-3, 7 = 3-4
+#define MQTT_SERIAL_RECEIVER_PIR "IF3B/ProjetVoletGroupe2/PIR" // de 1-4 pales, 5 = 1-2, 6 = 2-3, 7 = 3-4
 
 
 WiFiClient wifiClient;
 
 PubSubClient client(wifiClient);
 
-int i = 0;
-bool test = true;
 
 int active_mode = 0; // 0 auto et 1 manu
 int capteur_1 = 1; // 1 - 4 pales, 5 pales 1-2, 6 pales 2-3, 7 pales 3-4 
-int temps_ouverture = 6;
-int temps_fermeture = 18;
-
-void volet_close(){
-    Serial.println("Le volet se ferme");
-  
-}
-void volet_open(){
-    Serial.println("Le volet s'ouvre");
-}
+int max_temp = 30;
+int max_lum = 100; // A changer pour mettre à l'echelle
+int min_lum = 100; // A changer pour mettre à l'echelle
 
 void setup_wifi() {
     delay(10);
@@ -58,6 +45,64 @@ void setup_wifi() {
     Serial.println(WiFi.localIP());
 }
 
+
+void setup() {
+  Serial.begin(115200);
+  Serial.setTimeout(500);// Set time out for 
+  setup_wifi();
+  client.setServer(mqtt_server, mqtt_port);
+  client.setCallback(callback);
+  reconnect();
+}
+
+
+void callback(char* topic, byte *payload, unsigned int length) {
+    if(topic == MQTT_SERIAL_RECEIVER_MODE){
+      Serial.println("Mode :");
+      if(!*payload){ // 0 auto et 1 manuel
+        active_mode = 0;
+      } else {     
+        active_mode = 1;
+      }
+    }
+    if(topic == MQTT_SERIAL_RECEIVER_ACTION){
+      if(active_mode == 0){ 
+        if(!*payload){ // 0 ferme et 1 ouvre
+          
+          //int etat_final[4] = {0, 0, 0, 0};
+          //orienter_volet(etat_final);
+        } else {
+          
+          //int etat_final[4] = {1050, 1050, 1050, 1050};
+          //orienter_volet(etat_final);
+        }
+      }
+    }
+    if(topic == MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN){
+      int capteur = *payload;
+    }
+    if(topic == MQTT_SERIAL_RECEIVER_PIR){
+      // Gérer le chrono
+    }
+    if(topic == MQTT_SERIAL_RECEIVER_TEMP){
+      if(*payload > max_temp){
+        //int etat_final[4] = {1050, 1050, 1050, 1050};
+        //orienter_volet(etat_final);
+      }
+    }
+    if(topic == MQTT_SERIAL_RECEIVER_LUM){
+      if(*payload < min_lum){
+        //int etat_final[4] = {1050, 1050, 1050, 1050};
+        //orienter_volet(etat_final);
+      }
+      if(*payload < max_lum){
+        //Fermer la pale assigner (ici la pale est def par la variable : capteur_1
+      }
+    }
+}
+
+
+
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
@@ -72,10 +117,13 @@ void reconnect() {
       client.publish("IF3B/test/serialdata/tx", "reconnected");
       // ... and resubscribe
       client.subscribe(MQTT_SERIAL_RECEIVER_ACTION);
-      client.subscribe(MQTT_SERIAL_RECEIVER_TEMPS_OUVERTURE);
-      client.subscribe(MQTT_SERIAL_RECEIVER_TEMPS_FERMETURE);
-      client.subscribe(MQTT_SERIAL_RECEIVER_CAPTEUR_1);
       client.subscribe(MQTT_SERIAL_RECEIVER_MODE);
+      client.subscribe(MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN);
+      client.subscribe(MQTT_SERIAL_RECEIVER_PIR);
+      client.subscribe(MQTT_SERIAL_RECEIVER_LUM);
+      client.subscribe(MQTT_SERIAL_RECEIVER_TEMP);
+      
+      
       
     } else {
       Serial.print("failed, rc=");
@@ -87,84 +135,12 @@ void reconnect() {
   }
 }
 
-void callback(char* topic, byte *payload, unsigned int length) {
-
-
-
-    //Serial.println(topic); 
-    //Serial.write(payload, length);
-    if(topic == MQTT_SERIAL_RECEIVER_MODE){
-      Serial.println("Mode :");
-      if(!*payload){ // 0 manuel et 1 auto
-        Serial.println("fermeture");
-        //Fermeture volet
-      } else {
-        Serial.println("close function");
-        //Ouverture volet
-      }
-    }
-    if(topic == MQTT_SERIAL_RECEIVER_ACTION){
-      Serial.println("Action :");
-      if(active_mode == 0){ 
-        if(!*payload){ // 0 ferme et 1 ouvre
-          Serial.println("fermeture");
-          int etat_final[4] = {0, 0, 0, 0};
-          orienter_volet(etat_final);
-        } else {
-          Serial.println("ouverture");
-          int etat_final[4] = {1050, 1050, 1050, 1050};
-          orienter_volet(etat_final);
-        }
-      }
-    }
-    if(topic == MQTT_SERIAL_RECEIVER_TEMPS_OUVERTURE){
-      temps_ouverture = *payload;
-      Serial.write(temps_ouverture);
-    }
-    if(topic == MQTT_SERIAL_RECEIVER_TEMPS_FERMETURE){
-      temps_fermeture = *payload;
-      Serial.write(temps_fermeture);
-    }
-}
-
-
-void setup() {
-  Serial.begin(115200);
-  Serial.setTimeout(500);// Set time out for 
-  setup_wifi();
-  client.setServer(mqtt_server, mqtt_port);
-  client.setCallback(callback);
-
-  reconnect();
-  
-}
-
 void publishSerialData(char *serialData, char* type){
   if (!client.connected()) {
     reconnect();
-  }
-  if(type = "lum"){
-    client.publish(MQTT_SERIAL_PUBLISH_LUM, serialData);
-  }
-  if(type = "temp"){
-    client.publish(MQTT_SERIAL_PUBLISH_TEMP, serialData);
-  }
-  if(type = "mode"){
-    client.publish(MQTT_SERIAL_RECEIVER_MODE, serialData);
   }
 }
 
 void loop() {
    client.loop();
-   publishSerialData(mun, type); // Fonction pour print 
-   
-   if( active_mode == 0){// On vérifie si le mode est manuel ou auto
-     publishSerialData("Automatique", "mode");
-   } else {
-     publishSerialData("Manuel", "mode");
-   }
-   
-   
  }
-  
-  
