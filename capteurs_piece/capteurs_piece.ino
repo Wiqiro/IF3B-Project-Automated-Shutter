@@ -27,5 +27,5 @@ void loop() {
   float temperature = dht.readTemperature();
 
   Serial.printf("Light: %.2flx\tPIR: %d\tTemperature: %.2fC\n", lux, pir, temperature);
-    delay(500);
+  delay(500);
 }
