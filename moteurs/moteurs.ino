@@ -58,20 +58,24 @@ void setup() {
 
 
 void callback(char* topic, byte *payload, unsigned int length) {
-    if(topic == MQTT_SERIAL_RECEIVER_MODE){
-      Serial.println("Mode :");
-      if(!*payload){ // 0 auto et 1 manuel
+    Serial.printf("%s\n", topic);
+    Serial.printf("%s\n", payload);
+    if(strcmp(topic,MQTT_SERIAL_RECEIVER_MODE)){
+      if(!*payload){ // 0 auto et 1 manuel : traduire en chiffre
         active_mode = 0;
       } else {     
         active_mode = 1;
       }
     }
-    if(topic == MQTT_SERIAL_RECEIVER_ACTION){
-      if(active_mode == 0){ 
+    if(strcmp(topic,MQTT_SERIAL_RECEIVER_ACTION)){
+      int etat_final[4] = {0, 0, 0, 0};
+      orienter_volet(etat_final);
+      Serial.printf("action");
+      if(active_mode == 1){ 
         if(!*payload){ // 0 ferme et 1 ouvre
-          
-          //int etat_final[4] = {0, 0, 0, 0};
-          //orienter_volet(etat_final);
+          Serial.printf("Close");
+          int etat_final[4] = {0, 0, 0, 0};
+          orienter_volet(etat_final);
         } else {
           
           //int etat_final[4] = {1050, 1050, 1050, 1050};
@@ -79,27 +83,27 @@ void callback(char* topic, byte *payload, unsigned int length) {
         }
       }
     }
-    if(topic == MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN){
-      int capteur = *payload;
+    if(strcmp(topic,MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN)){
+      //int capteur = *payload;
     }
-    if(topic == MQTT_SERIAL_RECEIVER_PIR){
+    //if(strcmp(topic,MQTT_SERIAL_RECEIVER_PIR)){
       // Gérer le chrono
-    }
-    if(topic == MQTT_SERIAL_RECEIVER_TEMP){
-      if(*payload > max_temp){
-        int etat_final[4] = {1050, 1050, 1050, 1050};
-        orienter_volet(etat_final);
-      }
-    }
-    if(topic == MQTT_SERIAL_RECEIVER_LUM){
-      if(*payload < min_lum){
-        int etat_final[4] = {1050, 1050, 1050, 1050};
-        orienter_volet(etat_final);
-      }
-      if(*payload < max_lum){
+    //}
+    //if(strcmp(topic,MQTT_SERIAL_RECEIVER_TEMP)){
+    //  if(*payload > max_temp){
+    //    int etat_final[4] = {1050, 1050, 1050, 1050};
+    //    orienter_volet(etat_final);
+     // }
+    //}
+    //if(strcmp(topic,MQTT_SERIAL_RECEIVER_LUM)){
+    //  if(*payload < min_lum){
+    //    int etat_final[4] = {1050, 1050, 1050, 1050};
+    //    orienter_volet(etat_final);
+    //  }
+    //  if(*payload < max_lum){
         //Fermer la pale assigner (ici la pale est def par la variable : capteur_1
-      }
-    }
+    //  }
+    //}
 }
 
 
