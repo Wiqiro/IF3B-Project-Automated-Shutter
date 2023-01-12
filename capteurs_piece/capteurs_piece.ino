@@ -67,13 +67,13 @@ void setup() {
 
   reconnect();
   
-  //Wire.begin(); 
-  //lightMeter.begin(); //setup capteur luminosité
-  //pinMode(PIR, INPUT); //setup capteur pir
-  //dht.begin(); //setup capteur température
-  //display.begin(SSD1306_SWITCHCAPVCC, 0x3C); //setup ecran
+  Wire.begin(); 
+  lightMeter.begin(); //setup capteur luminosité
+  pinMode(PIR, INPUT); //setup capteur pir
+  dht.begin(); //setup capteur température
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C); //setup ecran
 
-  //ecran_hello_world();
+  ecran_hello_world();
 }
 
 
@@ -114,17 +114,17 @@ void callback(char* topic, byte *payload, unsigned int length) {
 
 
 
-void publishSerialData(char *serialData, char* type){
-  if (!client.connected()) {
-    reconnect();
-  }
-  if(type = "lum"){
+void publishSerialData(char serialData[], char type){
+  //if (!client.connected()) {
+  //  reconnect();
+  //}
+  if(type == 'l'){
     client.publish(MQTT_SERIAL_PUBLISH_LUM, serialData);
   }
-  if(type = "temp"){
+  if(type == 't'){
     client.publish(MQTT_SERIAL_PUBLISH_TEMP, serialData);
   }
-  if(type = "pir"){
+  if(type == 'p'){
     client.publish(MQTT_SERIAL_PUBLISH_PIR, serialData);
   }
 }
@@ -134,27 +134,28 @@ void publishSerialData(char *serialData, char* type){
 
 
 void loop() {
-  char * lux_buffer;
-  char * pir_buffer;
-  char * temp_buffer;
+  delay(200);
+  client.loop();
+  char lux_buffer[5];
+  char pir_buffer[5];
+  char temp_buffer[5];
 
   
   float lux = lightMeter.readLightLevel();
   sprintf(lux_buffer, "%f", lux);
-  publishSerialData(lux_buffer, "lum");
-  bool pir= digitalRead(PIR);
+  publishSerialData(lux_buffer, 'l');
+  bool pir = digitalRead(PIR);
   if(pir){
-    pir_buffer = "1";
+    strcpy(pir_buffer, "1");
   } else {
-    pir_buffer = "0";
+    strcpy(pir_buffer, "0");
   }
-  publishSerialData(pir_buffer, "pir"); 
+  publishSerialData(pir_buffer, 'p'); 
   float temp = dht.readTemperature();
-  sprintf(temp_buffer, "%f", temp);
-  publishSerialData(temp_buffer, "temp");
-
-  delay(500);
-  client.loop();
+  sprintf(temp_buffer, "%.1f", temp);
+  publishSerialData(temp_buffer, 't');
+  
+  Serial.printf("lux : %.1f, pir : %s, temp : %f\n",lux, pir_buffer, temp);
  
   
 }
