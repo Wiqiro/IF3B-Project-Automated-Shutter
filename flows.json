@@ -1,0 +1,1986 @@
+[
+    {
+        "id": "076acf0988d51a0e",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "4cfd47d301809151",
+        "type": "mqtt out",
+        "z": "076acf0988d51a0e",
+        "name": "Action",
+        "topic": "IF3B/ProjetVoletGroupe2/action",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6dd44bbfa04210e9",
+        "x": 2250,
+        "y": 680,
+        "wires": [],
+        "info": "up"
+    },
+    {
+        "id": "1de3b32294a6cf23",
+        "type": "ui_button",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "group": "312f1c97a04c3e7e",
+        "order": 1,
+        "width": 2,
+        "height": 1,
+        "passthru": true,
+        "label": "Open",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1790,
+        "y": 520,
+        "wires": [
+            [
+                "8ec0bce3b6fdc6d2"
+            ]
+        ]
+    },
+    {
+        "id": "8348b9451d1b15e4",
+        "type": "ui_button",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "group": "312f1c97a04c3e7e",
+        "order": 2,
+        "width": 2,
+        "height": 1,
+        "passthru": true,
+        "label": "Close",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "0",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1790,
+        "y": 560,
+        "wires": [
+            [
+                "8ec0bce3b6fdc6d2"
+            ]
+        ]
+    },
+    {
+        "id": "1a29b3baa072a55e",
+        "type": "ui_slider",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "a6485e9522e8e108",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "23.5",
+        "step": "0.5",
+        "className": "",
+        "x": 1050,
+        "y": 120,
+        "wires": [
+            [
+                "e046aea84937ea32",
+                "48cd3dc1ce719a61"
+            ]
+        ],
+        "inputLabels": [
+            "6"
+        ]
+    },
+    {
+        "id": "e046aea84937ea32",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "a6485e9522e8e108",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Ouverture du rideau :",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 1260,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "48cd3dc1ce719a61",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set heure d'ouverture",
+        "func": "global.set(\"HeureOuverture\", msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1ede881bc147628e",
+        "type": "ui_slider",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "a6485e9522e8e108",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "23.5",
+        "step": "0.5",
+        "className": "",
+        "x": 1050,
+        "y": 220,
+        "wires": [
+            [
+                "14475ea7fc09e305",
+                "38ec12325737e725"
+            ]
+        ],
+        "inputLabels": [
+            "18"
+        ]
+    },
+    {
+        "id": "38ec12325737e725",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set heure de fermeture",
+        "func": "global.set(\"HeureFermeture\", msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "14475ea7fc09e305",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "a6485e9522e8e108",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Fermeture du rideau :",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 1260,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "75f8c018e359e8b7",
+        "type": "mqtt in",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/temperature",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6dd44bbfa04210e9",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 290,
+        "y": 100,
+        "wires": [
+            [
+                "90209eea04e4dda3",
+                "fed9b83e40882ecc"
+            ]
+        ]
+    },
+    {
+        "id": "90209eea04e4dda3",
+        "type": "ui_gauge",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "group": "77d6ebd622fe0c28",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "",
+        "label": "units",
+        "format": "{{value}}",
+        "min": "10",
+        "max": "30",
+        "colors": [
+            "#21cff2",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "18",
+        "seg2": "22",
+        "className": "",
+        "x": 590,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "dae6b77acbc547bb",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "6",
+        "payloadType": "num",
+        "x": 870,
+        "y": 120,
+        "wires": [
+            [
+                "1a29b3baa072a55e"
+            ]
+        ]
+    },
+    {
+        "id": "3f2e940dae8bbb96",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "18",
+        "payloadType": "num",
+        "x": 870,
+        "y": 220,
+        "wires": [
+            [
+                "1ede881bc147628e"
+            ]
+        ]
+    },
+    {
+        "id": "8b07e120cdd243f7",
+        "type": "ui_slider",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "77d6ebd622fe0c28",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "50",
+        "step": "1",
+        "className": "",
+        "x": 1050,
+        "y": 360,
+        "wires": [
+            [
+                "2bdae73e0106cd6b",
+                "71f056a7d4238cd3"
+            ]
+        ],
+        "inputLabels": [
+            "6"
+        ]
+    },
+    {
+        "id": "2bdae73e0106cd6b",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "77d6ebd622fe0c28",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Seuil de température (maximum) :",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 1300,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "fd0e0fdd14cfc4b5",
+        "type": "ui_slider",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "b453ca564f924120",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "50",
+        "step": "1",
+        "className": "",
+        "x": 1050,
+        "y": 460,
+        "wires": [
+            [
+                "36f84084ebd13af5",
+                "df96859677ee9948"
+            ]
+        ],
+        "inputLabels": [
+            "18"
+        ]
+    },
+    {
+        "id": "36f84084ebd13af5",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "b453ca564f924120",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Seuil de luminosité (minimum) : ",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 1290,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "aafbb1c4b0c3b9fe",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "50",
+        "payloadType": "num",
+        "x": 870,
+        "y": 460,
+        "wires": [
+            [
+                "fd0e0fdd14cfc4b5"
+            ]
+        ]
+    },
+    {
+        "id": "defab86d96e3b81f",
+        "type": "ui_switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "Automatique / Manuel",
+        "tooltip": "",
+        "group": "8bb578f0a1a52c39",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 160,
+        "y": 620,
+        "wires": [
+            [
+                "aeb0ec15727e34af",
+                "188c4517dee84bcd"
+            ]
+        ]
+    },
+    {
+        "id": "3c284a586a20455f",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Check du mode",
+        "func": "if (global.get(\"mode\") == \"0\"){\n    if (global.get(\"mode_type\") == \"time\") {\n        msg.payload = \"1\";\n    } else {\n        msg.payload = \"2\";\n    }\n} else{\n    msg.payload = \"0\";\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 720,
+        "wires": [
+            [
+                "65bee585aadb2c1c"
+            ]
+        ]
+    },
+    {
+        "id": "81ff381f174d97aa",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "auto",
+        "payloadType": "str",
+        "x": 910,
+        "y": 720,
+        "wires": [
+            [
+                "3c284a586a20455f"
+            ]
+        ]
+    },
+    {
+        "id": "df96859677ee9948",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set lum_mini",
+        "func": "global.set(\"lum_mini\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "71f056a7d4238cd3",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set temp_max",
+        "func": "global.set(\"temp_max\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1240,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "65bee585aadb2c1c",
+        "type": "switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 1370,
+        "y": 720,
+        "wires": [
+            [
+                "b4ca913d608f11aa"
+            ],
+            [
+                "9c3672d12f05cf86"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "9c3672d12f05cf86",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Luminosité et Température",
+        "func": "if (global.get(\"temp\") > global.get(\"temp_max\")){\n    msg.payload = \"0\"; // Fermeture\n    global.set(\"etat_pale\", \"fermer\");\n} else {\n    if (global.get(\"lum\") < global.get(\"lum_mini\")) {\n        msg.payload = \"0\"; // Fermeture\n        global.set(\"etat_pale\", \"fermer\");\n    } else {\n        msg.payload = \"1\"; // Ouverture\n        global.set(\"etat_pale\", \"ouvert\");\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1640,
+        "y": 760,
+        "wires": [
+            [
+                "4cfd47d301809151",
+                "529ab21d3486e8cc"
+            ]
+        ]
+    },
+    {
+        "id": "fed9b83e40882ecc",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set temp",
+        "func": "global.set(\"temp\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8ec0bce3b6fdc6d2",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Check du mode",
+        "func": "if (global.get(\"mode\") == \"1\") {\n    return msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1980,
+        "y": 520,
+        "wires": [
+            [
+                "4cfd47d301809151",
+                "529ab21d3486e8cc"
+            ]
+        ]
+    },
+    {
+        "id": "aeb0ec15727e34af",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set mode",
+        "func": "global.set(\"mode\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e9ef24b446f474e7",
+        "type": "mqtt in",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/mode",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6dd44bbfa04210e9",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 700,
+        "wires": [
+            [
+                "aeb0ec15727e34af"
+            ]
+        ]
+    },
+    {
+        "id": "31e14d6034b15a04",
+        "type": "ui_switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "Luminosité et Température / Heure",
+        "tooltip": "",
+        "group": "8bb578f0a1a52c39",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "time",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "lum",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 160,
+        "y": 800,
+        "wires": [
+            [
+                "594476aff4b3bbb9"
+            ]
+        ]
+    },
+    {
+        "id": "594476aff4b3bbb9",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set mode type",
+        "func": "global.set(\"mode_type\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b4ca913d608f11aa",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Temps",
+        "func": "var date = new Date();\nvar options = { hour: 'numeric', hour12: false };\nvar time = date.toLocaleTimeString('fr-FR', options);\nvar hour = parseInt(time.split(':')[0]);\nif (hour >= global.get(\"HeureFermeture\")){\n    msg.payload = \"0\"; // Fermeture\n    global.set(\"etat_pale\", \"fermer\");\n    return msg;\n} else if (hour <= global.get(\"HeureOuverture\")) {\n    msg.payload = \"0\"; // Fermeture\n    global.set(\"etat_pale\", \"fermer\");\n    return msg;\n} else {\n    msg.payload = \"1\"; // Ouverture\n    global.set(\"etat_pale\", \"ouvert\");\n    return msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1570,
+        "y": 640,
+        "wires": [
+            [
+                "4cfd47d301809151",
+                "529ab21d3486e8cc"
+            ]
+        ]
+    },
+    {
+        "id": "da3daa65d90e9974",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "50",
+        "payloadType": "num",
+        "x": 90,
+        "y": 1000,
+        "wires": [
+            [
+                "de67ee861b274456"
+            ]
+        ]
+    },
+    {
+        "id": "de67ee861b274456",
+        "type": "ui_slider",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "b453ca564f924120",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "150",
+        "step": "1",
+        "className": "",
+        "x": 270,
+        "y": 1000,
+        "wires": [
+            [
+                "fb428c973525789a",
+                "f5bf3303e5fdbde9"
+            ]
+        ],
+        "inputLabels": [
+            "18"
+        ]
+    },
+    {
+        "id": "fb428c973525789a",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "b453ca564f924120",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Seuil de luminosité intérieur (minimum): ",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 540,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "f5bf3303e5fdbde9",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set lum_int_mini",
+        "func": "global.set(\"lum_int_mini\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7194b0063b5d231b",
+        "type": "mqtt out",
+        "z": "076acf0988d51a0e",
+        "name": "Assignation",
+        "topic": "IF3B/ProjetVoletGroupe2/pales",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6dd44bbfa04210e9",
+        "x": 1770,
+        "y": 1280,
+        "wires": [],
+        "info": "up"
+    },
+    {
+        "id": "efa1277c5214344b",
+        "type": "mqtt in",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/luminosite_ext",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6dd44bbfa04210e9",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 290,
+        "y": 180,
+        "wires": [
+            [
+                "3cdb95fbd9dfacc7",
+                "3048eb6eae3e18f5"
+            ]
+        ]
+    },
+    {
+        "id": "3cdb95fbd9dfacc7",
+        "type": "ui_gauge",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "group": "b453ca564f924120",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "",
+        "label": "lum",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "2000",
+        "colors": [
+            "#323434",
+            "#ca5421",
+            "#e7eb24"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 590,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "3048eb6eae3e18f5",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set lum",
+        "func": "global.set(\"lum\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "787b189ff0aab458",
+        "type": "ui_switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "Pale 1 :",
+        "tooltip": "",
+        "group": "abc0ea81293da97b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "1",
+        "onvalueType": "num",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "-1",
+        "offvalueType": "num",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 1160,
+        "y": 1380,
+        "wires": [
+            [
+                "a43564c6ca8f8ac3"
+            ]
+        ]
+    },
+    {
+        "id": "d985cd261bf9b9d7",
+        "type": "ui_switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "Pale 2 :",
+        "tooltip": "",
+        "group": "abc0ea81293da97b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "10",
+        "onvalueType": "num",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "-10",
+        "offvalueType": "num",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 1160,
+        "y": 1260,
+        "wires": [
+            [
+                "2bbd66ebe59309ad"
+            ]
+        ]
+    },
+    {
+        "id": "e9a9e0801a5e647a",
+        "type": "ui_switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "Pale 3 :",
+        "tooltip": "",
+        "group": "abc0ea81293da97b",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "100",
+        "onvalueType": "num",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "-100",
+        "offvalueType": "num",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 1160,
+        "y": 1320,
+        "wires": [
+            [
+                "ceece86974d984a8"
+            ]
+        ]
+    },
+    {
+        "id": "9d39323d2da373d2",
+        "type": "ui_switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "Pale 4 :",
+        "tooltip": "",
+        "group": "abc0ea81293da97b",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "1000",
+        "onvalueType": "num",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "-1000",
+        "offvalueType": "num",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 1160,
+        "y": 1200,
+        "wires": [
+            [
+                "7d6a84dc996b3661"
+            ]
+        ]
+    },
+    {
+        "id": "a43564c6ca8f8ac3",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set assignation somme",
+        "func": "global.set(\"assignation_somme\", global.get(\"assignation_somme\") + msg.payload);\nmsg.payload = global.get(\"assignation_somme\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 1380,
+        "wires": [
+            [
+                "7194b0063b5d231b"
+            ]
+        ]
+    },
+    {
+        "id": "2bbd66ebe59309ad",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set assignation somme",
+        "func": "global.set(\"assignation_somme\", global.get(\"assignation_somme\") + msg.payload);\nmsg.payload = global.get(\"assignation_somme\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 1260,
+        "wires": [
+            [
+                "7194b0063b5d231b"
+            ]
+        ]
+    },
+    {
+        "id": "ceece86974d984a8",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set assignation somme",
+        "func": "global.set(\"assignation_somme\", global.get(\"assignation_somme\") + msg.payload);\nmsg.payload = global.get(\"assignation_somme\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 1320,
+        "wires": [
+            [
+                "7194b0063b5d231b"
+            ]
+        ]
+    },
+    {
+        "id": "7d6a84dc996b3661",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set assignation somme",
+        "func": "global.set(\"assignation_somme\", global.get(\"assignation_somme\") + msg.payload);\nmsg.payload = global.get(\"assignation_somme\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 1200,
+        "wires": [
+            [
+                "7194b0063b5d231b"
+            ]
+        ]
+    },
+    {
+        "id": "dba6131682209251",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1500",
+        "payloadType": "num",
+        "x": 90,
+        "y": 1140,
+        "wires": [
+            [
+                "468a671cb1734052"
+            ]
+        ]
+    },
+    {
+        "id": "468a671cb1734052",
+        "type": "ui_slider",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "b453ca564f924120",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "4000",
+        "step": "10",
+        "className": "",
+        "x": 270,
+        "y": 1140,
+        "wires": [
+            [
+                "8700276e4a405a18",
+                "deb0f3bf97edeb2a"
+            ]
+        ],
+        "inputLabels": [
+            "18"
+        ]
+    },
+    {
+        "id": "8700276e4a405a18",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "b453ca564f924120",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Seuil de luminosité intérieur (maximum): ",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 540,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "deb0f3bf97edeb2a",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set lum_int_max",
+        "func": "global.set(\"lum_int_max\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e805d5e004a36807",
+        "type": "mqtt out",
+        "z": "076acf0988d51a0e",
+        "name": "Fermeture/Ouverture des pales assignées",
+        "topic": "IF3B/ProjetVoletGroupe2/etat_lum",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6dd44bbfa04210e9",
+        "x": 860,
+        "y": 1240,
+        "wires": [],
+        "info": "up"
+    },
+    {
+        "id": "54e841190a53a94a",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Check lum int",
+        "func": "if (global.get(\"mode\") == \"0\" && global.get(\"etat_pale\") == \"ouvert\") {\n    if (global.get(\"lum_int\") < global.get(\"lum_int_mini\")){\n        msg.payload = 0;\n    } else if (global.get(\"lum_int\") > global.get(\"lum_int_max\")) {\n        msg.payload = 1;\n    } else {\n        msg.payload = 2;\n    }\n} else {\n    msg.payload =   3;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 1280,
+        "wires": [
+            [
+                "4c150ec40dec3e1f"
+            ]
+        ]
+    },
+    {
+        "id": "188c4517dee84bcd",
+        "type": "mqtt out",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/mode",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6dd44bbfa04210e9",
+        "x": 490,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "08bcd90adccc8723",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "topic": "",
+        "payload": "1111",
+        "payloadType": "num",
+        "x": 1170,
+        "y": 1140,
+        "wires": [
+            [
+                "db836638b4a682eb"
+            ]
+        ]
+    },
+    {
+        "id": "db836638b4a682eb",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Déclaration assignation somme",
+        "func": "global.set(\"assignation_somme\", 1111);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1410,
+        "y": 1140,
+        "wires": [
+            [
+                "7194b0063b5d231b"
+            ]
+        ]
+    },
+    {
+        "id": "4c150ec40dec3e1f",
+        "type": "switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 570,
+        "y": 1280,
+        "wires": [
+            [
+                "e805d5e004a36807"
+            ],
+            [
+                "e805d5e004a36807"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "da47fd36d43ba30a",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "30",
+        "payloadType": "num",
+        "x": 870,
+        "y": 360,
+        "wires": [
+            [
+                "8b07e120cdd243f7"
+            ]
+        ]
+    },
+    {
+        "id": "1995e3cf300b2054",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "15",
+        "payloadType": "num",
+        "x": 110,
+        "y": 1560,
+        "wires": [
+            [
+                "6a05c32486712a10"
+            ]
+        ]
+    },
+    {
+        "id": "6a05c32486712a10",
+        "type": "ui_slider",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "group": "b7946b2bb04f7b38",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "120",
+        "step": "0.5",
+        "className": "",
+        "x": 290,
+        "y": 1560,
+        "wires": [
+            [
+                "b0cc217ee822578b",
+                "1bfdee828ff25349"
+            ]
+        ],
+        "inputLabels": [
+            "6"
+        ]
+    },
+    {
+        "id": "1bfdee828ff25349",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set temp_max",
+        "func": "global.set(\"pir_seuil\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 1500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b0cc217ee822578b",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "b7946b2bb04f7b38",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Temps sans mouvements avant la fermeture des lumiéres :",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 620,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "43921fa946604343",
+        "type": "mqtt in",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/pir",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6dd44bbfa04210e9",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 1700,
+        "wires": [
+            [
+                "8c6948ba8d5d7bdb",
+                "ad3efa20c671811b"
+            ]
+        ]
+    },
+    {
+        "id": "8c6948ba8d5d7bdb",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Check temps",
+        "func": "if (msg.payload == 0 && global.get(\"led\") == 1){\n    global.set(\"pir\", (global.get(\"pir\") + 0.5)); // message tous les 0.5 secondes\n    if (global.get(\"pir\") >= global.get(\"pir_seuil\")){\n        msg.payload = 0; //Fermeture\n        global.set(\"pir\", 0);\n        return msg;\n    }\n} else{\n    global.set(\"pir\", 0); // Lorsqu'il y a du mouvement on remet à 0\n} \n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1700,
+        "wires": [
+            [
+                "214d0256a4dcc943",
+                "a7aace9c1af98794"
+            ]
+        ]
+    },
+    {
+        "id": "ae02a565ec0c7dbe",
+        "type": "mqtt out",
+        "z": "076acf0988d51a0e",
+        "name": "Led",
+        "topic": "IF3B/ProjetVoletGroupe2/led",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6dd44bbfa04210e9",
+        "x": 2730,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "0e81639f88a4638e",
+        "type": "change",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2440,
+        "y": 740,
+        "wires": [
+            [
+                "ae02a565ec0c7dbe",
+                "e7686520c63e16f5"
+            ]
+        ]
+    },
+    {
+        "id": "92b4df63efd8ab21",
+        "type": "change",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2440,
+        "y": 800,
+        "wires": [
+            [
+                "ae02a565ec0c7dbe",
+                "e7686520c63e16f5"
+            ]
+        ]
+    },
+    {
+        "id": "529ab21d3486e8cc",
+        "type": "switch",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 2230,
+        "y": 780,
+        "wires": [
+            [
+                "0e81639f88a4638e"
+            ],
+            [
+                "92b4df63efd8ab21"
+            ]
+        ]
+    },
+    {
+        "id": "e7686520c63e16f5",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set led",
+        "func": "global.set(\"led\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2740,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "214d0256a4dcc943",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set led",
+        "func": "global.set(\"led\", msg.payload);\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 1780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eefa2537786fc86d",
+        "type": "ui_gauge",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "group": "b453ca564f924120",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "",
+        "label": "lum",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "2000",
+        "colors": [
+            "#323434",
+            "#ca5421",
+            "#e7eb24"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 1350,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "f93d6199d595c14e",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "b453ca564f924120",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Luminosité intérieur : ",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 440,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "31fc36671ba1602e",
+        "type": "ui_text",
+        "z": "076acf0988d51a0e",
+        "group": "b453ca564f924120",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Luminosité extérieur : ",
+        "format": "",
+        "layout": "row-center",
+        "className": "",
+        "x": 700,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "98379b8643d376b2",
+        "type": "mqtt in",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/luminosite_int",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6dd44bbfa04210e9",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1090,
+        "y": 1500,
+        "wires": [
+            [
+                "6a6ee44d81b587ca",
+                "eefa2537786fc86d"
+            ]
+        ]
+    },
+    {
+        "id": "6a6ee44d81b587ca",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set lum_int",
+        "func": "global.set(\"lum_int\", msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1350,
+        "y": 1500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "072cf18629429319",
+        "type": "inject",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "auto",
+        "payloadType": "str",
+        "x": 190,
+        "y": 1280,
+        "wires": [
+            [
+                "54e841190a53a94a"
+            ]
+        ]
+    },
+    {
+        "id": "a7aace9c1af98794",
+        "type": "mqtt out",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/led",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6dd44bbfa04210e9",
+        "x": 840,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "ad3efa20c671811b",
+        "type": "function",
+        "z": "076acf0988d51a0e",
+        "name": "Set led",
+        "func": "if( global.get(\"led\") == 0 && msg.payload == 1){\n    global.set(\"led\", msg.payload);\n    msg.payload = 1;\n    return msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 1800,
+        "wires": [
+            [
+                "df00c08966e54b03",
+                "7e2f2a61c77ff4cd"
+            ]
+        ]
+    },
+    {
+        "id": "df00c08966e54b03",
+        "type": "mqtt out",
+        "z": "076acf0988d51a0e",
+        "name": "",
+        "topic": "IF3B/ProjetVoletGroupe2/led",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6dd44bbfa04210e9",
+        "x": 720,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "7e2f2a61c77ff4cd",
+        "type": "debug",
+        "z": "076acf0988d51a0e",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 1920,
+        "wires": []
+    },
+    {
+        "id": "9935e405a0c257d2",
+        "type": "ui_spacer",
+        "z": "076acf0988d51a0e",
+        "name": "spacer",
+        "group": "312f1c97a04c3e7e",
+        "order": 3,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "6dd44bbfa04210e9",
+        "type": "mqtt-broker",
+        "name": "IF3B",
+        "broker": "mqtt.ci-ciad.utbm.fr",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "312f1c97a04c3e7e",
+        "type": "ui_group",
+        "name": "Button",
+        "tab": "5c6c44abb73ea67c",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a6485e9522e8e108",
+        "type": "ui_group",
+        "name": "Heures",
+        "tab": "5c6c44abb73ea67c",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "77d6ebd622fe0c28",
+        "type": "ui_group",
+        "name": "Température",
+        "tab": "5c6c44abb73ea67c",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b453ca564f924120",
+        "type": "ui_group",
+        "name": "Luminosité",
+        "tab": "5c6c44abb73ea67c",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8bb578f0a1a52c39",
+        "type": "ui_group",
+        "name": "Mode",
+        "tab": "5c6c44abb73ea67c",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "abc0ea81293da97b",
+        "type": "ui_group",
+        "name": "Assignation capteur/pale",
+        "tab": "5c6c44abb73ea67c",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b7946b2bb04f7b38",
+        "type": "ui_group",
+        "name": "Gestion de la lumiére",
+        "tab": "5c6c44abb73ea67c",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "5c6c44abb73ea67c",
+        "type": "ui_tab",
+        "name": "Controle",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
