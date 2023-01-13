@@ -27,6 +27,9 @@
 #define STEPS_PER_REV 2048
 #define STEPPER_MAX_POS 1024
 
+int POSITION_OUVERTE[4] {550, 550, 550, 550};
+int POSITION_FERMEE[4] {0, 0, 0, 0};
+
 // initialize the stepper library
 Stepper stepper1(STEPS_PER_REV, STEPPER1_1, STEPPER1_3, STEPPER1_2, STEPPER1_4);
 Stepper stepper2(STEPS_PER_REV, STEPPER2_1, STEPPER2_3, STEPPER2_2, STEPPER2_4);
@@ -35,9 +38,10 @@ Stepper stepper4(STEPS_PER_REV, STEPPER4_1, STEPPER4_3, STEPPER4_2, STEPPER4_4);
 Stepper stepper[4] = {stepper1, stepper2, stepper3, stepper4};
 
 int etat_pale[4] = {0, 0, 0, 0};
+bool assignation_pales[4] = {0, 0, 0, 0};
 
+void bouger_pale(int pale, int pas);
 void calibrer_volet(int bouton);
-
 void orienter_volet(int etat_final[4]);
 
 #endif

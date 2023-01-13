@@ -8,18 +8,21 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "nicolas";
-const char* password = "00000000";
+const char* ssid = "findx3";
+const char* password = "12341234";
 const char* mqtt_server = "mqtt.ci-ciad.utbm.fr";
 #define mqtt_port 1883
 #define MQTT_USER "" 
 #define MQTT_PASSWORD ""
-#define MQTT_SERIAL_PUBLISH_LUM "IF3B/ProjetVoletGroupe2/luminosite"
+#define MQTT_SERIAL_PUBLISH_LUM "IF3B/ProjetVoletGroupe2/luminosite_int"
 #define MQTT_SERIAL_PUBLISH_TEMP "IF3B/ProjetVoletGroupe2/temperature"
 #define MQTT_SERIAL_PUBLISH_PIR "IF3B/ProjetVoletGroupe2/pir"
 #define MQTT_SERIAL_RECEIVER_MODE "IF3B/ProjetVoletGroupe2/mode" // 0 = automatique et 1 = manuel
+#define MQTT_SERIAL_RECEIVER_LED "IF3B/ProjetVoletGroupe2/led" // 0 = automatique et 1 = manuel
+
 
 #define PIR 27
+#define LED 26
 
 WiFiClient wifiClient;
 
@@ -28,11 +31,11 @@ PubSubClient client(wifiClient);
 int i = 0;
 bool test = true;
 
-int active_mode = 0; // 0 auto et 1 manu
+bool mode_volet = 0; // 0 auto et 1 manu
 
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 BH1750 lightMeter;
-DHT dht(18, DHT11);
+DHT dht(5, DHT11);
 
 
 
@@ -70,16 +73,12 @@ void setup() {
   Wire.begin(); 
   lightMeter.begin(); //setup capteur luminosité
   pinMode(PIR, INPUT); //setup capteur pir
+  pinMode(LED, OUTPUT);
   dht.begin(); //setup capteur température
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); //setup ecran
 
   ecran_hello_world();
 }
-
-
-
-
-
 
 
 void reconnect() {
@@ -95,6 +94,8 @@ void reconnect() {
       //Once connected, publish an announcement...
       client.publish("IF3B/test/serialdata/tx", "reconnected");
       // ... and resubscribe
+      client.subscribe(MQTT_SERIAL_RECEIVER_MODE);
+      client.subscribe(MQTT_SERIAL_RECEIVER_LED);
       
     } else {
       Serial.print("failed, rc=");
@@ -107,9 +108,23 @@ void reconnect() {
 }
 
 void callback(char* topic, byte *payload, unsigned int length) {
-    if(topic == MQTT_SERIAL_RECEIVER_MODE){
-        active_mode = *payload;
+  if (strcmp(topic,MQTT_SERIAL_RECEIVER_MODE) == 0) {
+    if (payload[0] == '0') { // 0 auto et 1 manuel : traduire en chiffre
+      mode_volet = 0;
+      Serial.println("Mode automatique");
+    } else {     
+      mode_volet = 1;
+      Serial.println("Mode manuel");
     }
+  } else if (strcmp(topic, MQTT_SERIAL_RECEIVER_LED) == 0) {
+    if (payload[0] == '0') { // 0 auto et 1 manuel : traduire en chiffre
+      digitalWrite(LED, LOW);
+      Serial.println("LED eteinte");
+    } else {     
+      digitalWrite(LED, HIGH);
+      Serial.println("LED allumee");
+    }
+  }
 }
 
 
@@ -133,31 +148,47 @@ void publishSerialData(char serialData[], char type){
 
 
 
-void loop() {
-  delay(200);
+void loop() { 
   client.loop();
-  char lux_buffer[5];
-  char pir_buffer[5];
-  char temp_buffer[5];
+
+  bool pir_val = digitalRead(PIR);
+  float lux_val = lightMeter.readLightLevel();
+  float dht_val = dht.readTemperature();
+
+
+  char lux_buffer[6];
+  char pir_buffer[2];
+  char dht_buffer[3];
+
 
   
-  float lux = lightMeter.readLightLevel();
-  sprintf(lux_buffer, "%f", lux);
-  publishSerialData(lux_buffer, 'l');
-  bool pir = digitalRead(PIR);
-  if(pir){
+  if (pir_val) {
     strcpy(pir_buffer, "1");
   } else {
     strcpy(pir_buffer, "0");
   }
-  publishSerialData(pir_buffer, 'p'); 
-  float temp = dht.readTemperature();
-  sprintf(temp_buffer, "%.1f", temp);
-  publishSerialData(temp_buffer, 't');
+  sprintf(dht_buffer, "%d", (int)dht_val);
+  sprintf(lux_buffer, "%d", (int)lux_val);
+
+  publishSerialData(dht_buffer, 't');
+  publishSerialData(lux_buffer, 'l');
+  publishSerialData(pir_buffer, 'p');
   
-  Serial.printf("lux : %.1f, pir : %s, temp : %f\n",lux, pir_buffer, temp);
- 
-  
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.setTextSize(2);
+  display.printf("Volet IF3B\n");
+  display.setTextSize(1);
+  if (mode_volet) {
+    display.println("Mode: manuel");
+  } else {
+    display.println("Mode: auto");
+  }
+  //display.printf("Mode: %d", mode_volet);
+  display.printf("\nTemperature: %.1f\n\nLuminosite int: %.1f\n", dht_val, lux_val, lux_val);
+  display.display(); 
+  delay(500);
 }
 
 

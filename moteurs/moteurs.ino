@@ -1,32 +1,41 @@
-#include "controle_moteurs.h"
 #include <WiFi.h>
 #include <PubSubClient.h>
-const char* ssid = "nicolas";
-const char* password = "00000000";
+#include <Wire.h>
+#include <BH1750.h>
+
+
+#include "controle_moteurs.h"
+
+const char* ssid = "findx3";
+const char* password = "12341234";
 const char* mqtt_server = "mqtt.ci-ciad.utbm.fr";
 #define mqtt_port 1883
 #define MQTT_USER "" 
 #define MQTT_PASSWORD ""
-#define MQTT_SERIAL_RECEIVER_LUM "IF3B/ProjetVoletGroupe2/luminosite"
-#define MQTT_SERIAL_RECEIVER_TEMP "IF3B/ProjetVoletGroupe2/temperature"
-#define MQTT_SERIAL_RECEIVER_MAX_LUM "IF3B/ProjetVoletGroupe2/max/luminosite"
-#define MQTT_SERIAL_RECEIVER_MAX_TEMP "IF3B/ProjetVoletGroupe2/max/temperature"
+#define MQTT_SERIAL_PUBLISH_LUM_EXT "IF3B/ProjetVoletGroupe2/luminosite_ext"
 #define MQTT_SERIAL_RECEIVER_ACTION "IF3B/ProjetVoletGroupe2/action" // 0 ferme et 1 ouvre
 #define MQTT_SERIAL_RECEIVER_MODE "IF3B/ProjetVoletGroupe2/mode" // 0 = automatique et 1 = manuel
-#define MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN "IF3B/ProjetVoletGroupe2/capteur" // de 1-4 pales, 5 = 1-2, 6 = 2-3, 7 = 3-4
-#define MQTT_SERIAL_RECEIVER_PIR "IF3B/ProjetVoletGroupe2/PIR" // de 1-4 pales, 5 = 1-2, 6 = 2-3, 7 = 3-4
-
+#define MQTT_SERIAL_RECEIVER_PALES "IF3B/ProjetVoletGroupe2/pales"
+#define MQTT_SERIAL_RECEIVER_ETAT_LUM "IF3B/ProjetVoletGroupe2/etat_lum"
 
 WiFiClient wifiClient;
-
 PubSubClient client(wifiClient);
 
+#define BOUTON1 23
+#define BOUTON2 35
+BH1750 lightMeter;
 
-int active_mode = 0; // 0 auto et 1 manu
-int capteur_1 = 1; // 1 - 4 pales, 5 pales 1-2, 6 pales 2-3, 7 pales 3-4 
+
+bool mode_volet = 0; // 0 auto et 1 manu
+int assignation_1 = 1; // 1 - 4 pales, 5 pales 1-2, 6 pales 2-3, 7 pales 3-4 
 int max_temp = 27;
-int max_lum = 5000; // A changer pour mettre à l'echelle
-int min_lum = 100; // A changer pour mettre à l'echelle
+int max_lum = 5000; //fermeture de la pale si supérieur
+int min_lum = 100; // allumage de la diode si inférieur
+
+int pir_temps = 0;
+float temperature = 0;
+float lux_piece = 0;
+
 
 void setup_wifi() {
     delay(10);
@@ -47,63 +56,59 @@ void setup_wifi() {
 }
 
 
+
 void setup() {
   Serial.begin(115200);
-  Serial.setTimeout(500);// Set time out for 
+  Serial.setTimeout(500); // Set time out for 
+
   setup_wifi();
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
   reconnect();
+
+  Wire.begin(); 
+  lightMeter.begin(); //setup capteur luminosité
+
+  pinMode(BOUTON1, INPUT);
+  pinMode(BOUTON2, INPUT);
+  calibrer_volet(BOUTON1); 
 }
 
 
+
 void callback(char* topic, byte *payload, unsigned int length) {
-    Serial.printf("%s\n", topic);
-    Serial.printf("%s\n", payload);
-    if(strcmp(topic,MQTT_SERIAL_RECEIVER_MODE)){
-      if(!*payload){ // 0 auto et 1 manuel : traduire en chiffre
-        active_mode = 0;
-      } else {     
-        active_mode = 1;
-      }
+  if (strcmp(topic,MQTT_SERIAL_RECEIVER_MODE) == 0) {
+    if (payload[0] == '0') { // 0 auto et 1 manuel : traduire en chiffre
+      mode_volet = 0;
+      Serial.println("Mode automatique");
+    } else {     
+      mode_volet = 1;
+      Serial.println("Mode manuel");
     }
-    if(strcmp(topic,MQTT_SERIAL_RECEIVER_ACTION)){
-      int etat_final[4] = {0, 0, 0, 0};
-      orienter_volet(etat_final);
-      Serial.printf("action");
-      if(active_mode == 1){ 
-        if(!*payload){ // 0 ferme et 1 ouvre
-          Serial.printf("Close");
-          int etat_final[4] = {0, 0, 0, 0};
-          orienter_volet(etat_final);
-        } else {
-          
-          //int etat_final[4] = {1050, 1050, 1050, 1050};
-          //orienter_volet(etat_final);
+  } else if (strcmp(topic,MQTT_SERIAL_RECEIVER_ACTION) == 0) {
+      if (payload[0] == '0') { // 0 ferme et 1 ouvre
+        Serial.println("Fermeture du volet");
+        orienter_volet(POSITION_FERMEE);
+      } else {
+        Serial.println("Ouverture du volet");
+        orienter_volet(POSITION_OUVERTE);
+      }
+  } else if (strcmp(topic, MQTT_SERIAL_RECEIVER_PALES) == 0) {
+    assignation_pales[0] = payload[0] - '1';
+    assignation_pales[1] = payload[1] - '1';
+    assignation_pales[2] = payload[2] - '1';
+    assignation_pales[3] = payload[3] - '1';
+  } else if (strcmp(topic, MQTT_SERIAL_RECEIVER_ETAT_LUM) == 0)  {
+    for (int pale = 0; pale < 4; pale++) {
+      if (assignation_pales[pale]) {
+        if (payload[0] == '0' && etat_pale[pale] < 550) {
+          bouger_pale(pale, 50);
+        } else if (payload[0] == '1' && etat_pale[pale] > 0) {
+          bouger_pale(pale, -50);
         }
       }
     }
-    if(strcmp(topic,MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN)){
-      //int capteur = *payload;
-    }
-    //if(strcmp(topic,MQTT_SERIAL_RECEIVER_PIR)){
-      // Gérer le chrono
-    //}
-    //if(strcmp(topic,MQTT_SERIAL_RECEIVER_TEMP)){
-    //  if(*payload > max_temp){
-    //    int etat_final[4] = {1050, 1050, 1050, 1050};
-    //    orienter_volet(etat_final);
-     // }
-    //}
-    //if(strcmp(topic,MQTT_SERIAL_RECEIVER_LUM)){
-    //  if(*payload < min_lum){
-    //    int etat_final[4] = {1050, 1050, 1050, 1050};
-    //    orienter_volet(etat_final);
-    //  }
-    //  if(*payload < max_lum){
-        //Fermer la pale assigner (ici la pale est def par la variable : capteur_1
-    //  }
-    //}
+  } 
 }
 
 
@@ -123,12 +128,8 @@ void reconnect() {
       // ... and resubscribe
       client.subscribe(MQTT_SERIAL_RECEIVER_ACTION);
       client.subscribe(MQTT_SERIAL_RECEIVER_MODE);
-      client.subscribe(MQTT_SERIAL_RECEIVER_CAPTEUR_ASSIGN);
-      client.subscribe(MQTT_SERIAL_RECEIVER_PIR);
-      client.subscribe(MQTT_SERIAL_RECEIVER_LUM);
-      client.subscribe(MQTT_SERIAL_RECEIVER_TEMP);
-      
-      
+      client.subscribe(MQTT_SERIAL_RECEIVER_PALES);
+      client.subscribe(MQTT_SERIAL_RECEIVER_ETAT_LUM);
       
     } else {
       Serial.print("failed, rc=");
@@ -140,12 +141,55 @@ void reconnect() {
   }
 }
 
-void publishSerialData(char *serialData, char* type){
-  if (!client.connected()) {
+void publishSerialData(char *serialData, char type){
+  /*if (!client.connected()) {
     reconnect();
+  }*/
+  if (type == 'l') {
+    client.publish(MQTT_SERIAL_PUBLISH_LUM_EXT, serialData);
+  } else if (type == 'm') {
+    client.publish(MQTT_SERIAL_RECEIVER_MODE, serialData);
   }
 }
 
+time_t timer = time(NULL);
+
 void loop() {
-   client.loop();
- }
+  if (time(NULL) - timer > 1) {
+    timer = time(NULL);
+    float lux_val = lightMeter.readLightLevel();
+    char lux_buffer[6];
+    sprintf(lux_buffer, "%d", (int)lux_val);
+    publishSerialData(lux_buffer, 'l');
+  }
+  
+
+  if (digitalRead(BOUTON2)) {
+    mode_volet = !mode_volet;
+    if (mode_volet) {
+      publishSerialData("1", 'm');
+    } else {
+      publishSerialData("0", 'm');
+    }
+    delay(500);
+  }
+  if (digitalRead(BOUTON1)) {
+    Serial.println("Bouton 1 presse");
+    if (mode_volet == 0) {
+    Serial.println("Calibrage");
+      delay(500);
+      calibrer_volet(BOUTON1);
+    } else {
+      Serial.println("Fermeture/ouverture");
+      if (etat_pale[0] == 0 && etat_pale[1] == 0 && etat_pale[2] == 0 && etat_pale[3] == 0) {
+        orienter_volet(POSITION_OUVERTE);
+      } else {
+        orienter_volet(POSITION_FERMEE);
+      }
+    }
+  }
+
+  client.loop();
+  
+}
+
