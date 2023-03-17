@@ -8,10 +8,10 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "findx3";
-const char* password = "12341234";
-const char* mqtt_server = "mqtt.ci-ciad.utbm.fr";
-#define mqtt_port 1883
+const char* ssid = ""; //name of wifi device
+const char* password = ""; //wifi password
+const char* mqtt_server = ""; //mqtt server
+#define mqtt_port 0 //mqtt port
 #define MQTT_USER "" 
 #define MQTT_PASSWORD ""
 #define MQTT_SERIAL_PUBLISH_LUM "IF3B/ProjetVoletGroupe2/luminosite_int"
